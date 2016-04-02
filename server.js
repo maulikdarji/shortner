@@ -52,8 +52,11 @@ app.get("/new/*",function(req,res){
                     else{
                       console.log(insData);
                       res.writeHead(200 , {"content-type":"application/json"});
-                      op=JSON.stringify(insData.ops);
-                      res.end(op);
+                      op={
+                        'original_url':insData.ops[0].original_url,
+                        'short_url':insData.ops[0].short_url
+                  }
+                      res.end(JSON.stringify(op));
                       db.close();
                     }
               });//EOF insert success
@@ -63,8 +66,11 @@ app.get("/new/*",function(req,res){
             }
             else{
               res.writeHead(200 , {"content-type":"application/json"});
-                  op=JSON.stringify(match);
-                  res.end(op);
+                  op={
+                    'original_url':match[0].original_url,
+                    'short_url':match[0].short_url
+                  }
+                  res.end(JSON.stringify(op));
                   db.close();
             }
           }
@@ -76,7 +82,9 @@ app.get("/new/*",function(req,res){
    
   }
   else{
-    res.end("Invalid URL");
+    res.writeHead(200 , {"content-type":"application/json"});
+    op={"error":"invalid URL"};
+    res.end(JSON.stringify(op));
   }
 });
 
